@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="theme-color" content="#0f3d3e" />
+    <title>Treino 3 Meses</title>
+    <link rel="icon" href="icon.svg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-shapes" aria-hidden="true"></div>
+
+    <main class="app-main">
+      <div class="screen-stack">
+      <section id="screen-list" class="screen is-active">
+        <header class="app-header">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 64 64" class="logo-icon">
+                <rect x="4" y="8" width="56" height="12" rx="6"></rect>
+                <rect x="10" y="26" width="44" height="12" rx="6"></rect>
+                <rect x="16" y="44" width="32" height="12" rx="6"></rect>
+              </svg>
+            </div>
+            <h1>Treino 3 Meses</h1>
+            <p>Plano completo com intervalos, coach e lembretes.</p>
+          </div>
+          <div class="day-summary">
+            <div class="summary-card">
+              <span>Dia</span>
+              <strong id="day-label">1/84</strong>
+            </div>
+            <div class="summary-card">
+              <span>Semana</span>
+              <strong id="week-label">1</strong>
+            </div>
+            <div class="summary-card">
+              <span>Mes</span>
+              <strong id="month-label">1</strong>
+            </div>
+          </div>
+        </header>
+        <div class="panel hero">
+          <div>
+            <h2>Treino do dia</h2>
+            <p>Siga o calendario e comece o treino com explicacao guiada.</p>
+          </div>
+          <div class="hero-actions">
+            <button class="primary" id="start-workout">Iniciar treino guiado</button>
+            <button class="ghost" id="reset-progress">Resetar progresso</button>
+          </div>
+        </div>
+        <div id="exercise-list" class="grid"></div>
+      </section>
+
+      <section id="screen-coach" class="screen">
+        <div class="screen-header">
+          <div>
+            <h2>Coach</h2>
+            <p>Treino guiado com simulacao e intervalos automaticos.</p>
+          </div>
+        </div>
+        <div class="rest-overlay" id="rest-overlay">
+          <div class="rest-card">
+            <span class="label" id="rest-overlay-label">Intervalo</span>
+            <div class="rest-big" id="rest-overlay-time">00:00</div>
+            <div class="rest-next" id="rest-overlay-next">Proximo: -</div>
+            <button class="primary" id="rest-overlay-skip">Pular intervalo</button>
+          </div>
+        </div>
+        <div class="panel coach">
+          <div class="coach-main">
+            <div class="coach-header">
+              <div>
+                <span class="label">Exercicio atual</span>
+                <h2 id="coach-ex-name">-</h2>
+              </div>
+              <div class="pill" id="coach-set">Serie 1 / 3</div>
+            </div>
+            <div class="coach-meta">
+              <div class="meta-box">
+                <span>Reps</span>
+                <strong id="coach-reps">-</strong>
+              </div>
+            <div class="meta-box">
+              <span>Reps serie</span>
+              <strong id="rep-progress">0/0</strong>
+            </div>
+              <div class="meta-box">
+                <span>Proximo</span>
+                <strong id="coach-next">-</strong>
+              </div>
+              <div class="meta-box">
+                <span>Status</span>
+                <strong id="coach-status">Pronto</strong>
+              </div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-text" id="progress-text">0%</div>
+            <div class="coach-body">
+              <div>
+                <h3>Explicacao rapida</h3>
+                <p id="coach-tip">-</p>
+                <ul id="coach-steps" class="steps"></ul>
+              </div>
+              <div class="sim">
+              <div class="sim-title">Simulacao</div>
+              <div class="sim-figure pose-a ex-idle" id="sim-figure">
+                <div class="ground"></div>
+                <div class="head"></div>
+                <div class="torso"></div>
+                <div class="arm left"></div>
+                <div class="arm right"></div>
+                <div class="leg left"></div>
+                <div class="leg right"></div>
+              </div>
+              <div class="sim-caption" id="sim-caption">Prepare o movimento.</div>
+              <div class="sim-counter" id="sim-counter">0</div>
+              <div class="sim-progress">
+                <div class="sim-bar" id="sim-bar"></div>
+              </div>
+              </div>
+            </div>
+            <div class="coach-actions">
+              <button class="primary" id="coach-start">Iniciar serie</button>
+              <button class="ghost" id="coach-skip">Pular exercicio</button>
+            </div>
+          </div>
+          <aside class="coach-side"></aside>
+        </div>
+      </section>
+
+      <section id="screen-calendar" class="screen">
+        <div class="screen-header">
+          <div>
+            <h2>Calendario</h2>
+            <p>Seu progresso diario nos 3 meses.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Calendario do treino</h2>
+          <p>Treino sequencial: nao pule dias. Cada dia concluido avanca para o proximo.</p>
+          <div id="calendar-grid" class="calendar-grid"></div>
+          <div class="status" id="calendar-status"></div>
+        </div>
+      </section>
+
+      <section id="screen-reminders" class="screen">
+        <div class="screen-header">
+          <div>
+            <h2>Lembretes</h2>
+            <p>Notificacoes para manter a rotina.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Lembretes e notificacoes</h2>
+          <p>Funciona no Android (APK) com notificacoes locais. No web exige HTTPS/localhost e a pagina aberta.</p>
+          <div class="form-grid">
+            <label class="field">
+              <span>Ativar lembretes</span>
+              <input type="checkbox" id="reminders-enabled" />
+            </label>
+            <label class="field">
+              <span>Horario</span>
+              <input type="time" id="reminders-time" value="18:00" />
+            </label>
+            <div class="field">
+              <span>Dias da semana</span>
+              <div class="days" id="reminders-days"></div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="primary" id="reminders-save">Salvar lembretes</button>
+            <button class="ghost" id="reminders-test">Testar notificacao</button>
+          </div>
+          <div id="reminders-status" class="status"></div>
+          <div id="reminders-next" class="status"></div>
+        </div>
+      </section>
+
+      <section id="screen-settings" class="screen">
+        <div class="screen-header">
+          <div>
+            <h2>Configuracoes</h2>
+            <p>Ajustes do coach, som e intervalo.</p>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>Configuracoes</h2>
+          <div class="form-grid">
+            <label class="field">
+              <span>Intervalo global (multiplicador)</span>
+              <input type="range" id="rest-mult" min="0.6" max="1.6" step="0.05" value="1" />
+              <strong id="rest-mult-value">1.00x</strong>
+            </label>
+            <label class="field">
+              <span>Coach com voz</span>
+              <input type="checkbox" id="voice-enabled" />
+            </label>
+            <label class="field">
+              <span>Som de termino</span>
+              <input type="checkbox" id="sound-enabled" checked />
+            </label>
+            <label class="field">
+              <span>Auto avancar serie</span>
+              <input type="checkbox" id="auto-advance" checked />
+            </label>
+            <label class="field">
+              <span>Mostrar simulacao</span>
+              <input type="checkbox" id="sim-enabled" checked />
+            </label>
+            <label class="field">
+              <span>Modo escuro</span>
+              <input type="checkbox" id="dark-mode" />
+            </label>
+          </div>
+          <div class="hero-actions">
+            <button class="primary" id="save-settings">Salvar</button>
+            <button class="ghost" id="reset-settings">Resetar</button>
+            <button class="ghost" id="test-voice">Testar voz</button>
+            <button class="ghost" id="test-sound">Testar som</button>
+          </div>
+          <div id="settings-status" class="status"></div>
+        </div>
+      </section>
+      </div>
+    </main>
+
+    <nav class="bottom-nav">
+      <button class="nav-btn is-active" data-route="list">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        Lista
+      </button>
+      <button class="nav-btn" data-route="coach">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M4 20l4-8 4 3 4-7 4 12"/><circle cx="8" cy="6" r="2"/></svg>
+        Coach
+      </button>
+      <button class="nav-btn" data-route="calendar">
+        <svg viewBox="0 0 24 24" class="icon"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+        Calendario
+      </button>
+      <button class="nav-btn" data-route="reminders">
+        <svg viewBox="0 0 24 24" class="icon"><path d="M12 4a6 6 0 0 1 6 6v4l2 2H4l2-2v-4a6 6 0 0 1 6-6"/><path d="M9 20a3 3 0 0 0 6 0"/></svg>
+        Lembretes
+      </button>
+      <button class="nav-btn" data-route="settings">
+        <svg viewBox="0 0 24 24" class="icon"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.2-2-3.4-2.3.8a7 7 0 0 0-1.6-.9L14 3h-4l-.9 2.3a7 7 0 0 0-1.6.9L5.2 5.4l-2 3.4 2 1.2a7 7 0 0 0 0 2l-2 1.2 2 3.4 2.3-.8a7 7 0 0 0 1.6.9L10 21h4l.9-2.3a7 7 0 0 0 1.6-.9l2.3.8 2-3.4-2-1.2c.1-.3.1-.7.1-1z"/></svg>
+        Config
+      </button>
+    </nav>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
