@@ -1,0 +1,73 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+
+    env:
+      JAVA_HOME: /usr/lib/jvm/java-17-openjdk-amd64
+      ANDROID_HOME: $HOME/Android/Sdk
+      PATH: $HOME/Android/Sdk/cmdline-tools/latest/bin:$HOME/Android/Sdk/platform-tools:$PATH
+
+    steps:
+      # 1️⃣ Checa o repositório
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2️⃣ Configura Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: "pnpm"
+
+      # 3️⃣ Instala pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 4️⃣ Instala dependências do projeto
+      - name: Install dependencies
+        run: pnpm install
+
+      # 5️⃣ Configura Java (17)
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      # 6️⃣ Configura Android SDK
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        with:
+          api-level: 34
+          build-tools: 34.0.0
+          cmdline-tools: latest
+
+      # 7️⃣ Aceita licenças Android SDK
+      - name: Accept Android licenses
+        run: yes | sdkmanager --licenses
+
+      # 8️⃣ Sincroniza Capacitor Android
+      - name: Sync Capacitor Android
+        run: npx cap sync android
+
+      # 9️⃣ Build do APK
+      - name: Build APK
+        working-directory: android
+        run: ./gradlew assembleDebug --no-daemon --max-workers=2
+
+      # 🔟 Upload do APK gerado
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-debug-apk
+          path: android/app/build/outputs/apk/debug/app-debug.apk
