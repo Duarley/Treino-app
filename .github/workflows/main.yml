@@ -11,23 +11,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Pega o código do repositório
+      # 1️⃣ Checkout do código
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Instala Node.js
+      # 2️⃣ Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      # 3️⃣ Instala utilitários essenciais (tar, unzip, wget)
+      # 3️⃣ Instalar ferramentas básicas
       - name: Install essential tools
         run: sudo apt-get update && sudo apt-get install -y unzip tar wget build-essential
 
-      # 4️⃣ Cache do Gradle
+      # 4️⃣ Cache Gradle
       - name: Cache Gradle
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.gradle/caches
@@ -36,39 +36,46 @@ jobs:
           restore-keys: |
             gradle-${{ runner.os }}-
 
-      # 5️⃣ Cache do PNPM
+      # 5️⃣ Cache PNPM
       - name: Cache PNPM
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.pnpm-store
-          key: pnpm-${{ runner.os }}-${{ hashFiles('**/package-lock.json','**/pnpm-lock.yaml') }}
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml','**/package-lock.json') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
 
-      # 6️⃣ Configura Android SDK
+      # 6️⃣ Setup Android SDK (corrigido)
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
-        with:
-          api-level: 34
-          build-tools: 34.0.0
-          cmdline-tools: latest
+        uses: android-actions/setup-android@v3
 
-      # 7️⃣ Instala PNPM e dependências do projeto
-      - name: Install PNPM dependencies
+      # 7️⃣ Instalar SDK necessário
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+      # 8️⃣ Instalar dependências
+      - name: Install dependencies
         run: |
           corepack enable
           pnpm install
 
-      # 8️⃣ Sincroniza Capacitor com Android
+      # 9️⃣ Build do app web (ESSENCIAL)
+      - name: Build Web App
+        run: pnpm build
+
+      # 🔟 Sincronizar Capacitor
       - name: Capacitor sync Android
         run: npx cap sync android
 
-      # 9️⃣ Build do APK
+      # 1️⃣1️⃣ Build APK
       - name: Build Debug APK
         working-directory: android
-        run: ./gradlew assembleDebug --no-daemon --max-workers=1
+        run: ./gradlew assembleDebug --no-daemon
+        env:
+          GRADLE_OPTS: -Xmx2g
 
-      # 🔟 Upload do APK como artefato
+      # 1️⃣2️⃣ Upload do APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
