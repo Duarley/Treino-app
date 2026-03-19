@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Treino 3 Meses</string>
-    <string name="title_activity_main">Treino 3 Meses</string>
-    <string name="package_name">com.treino.duassemanas</string>
-    <string name="custom_url_scheme">com.treino.duassemanas</string>
-</resources>
