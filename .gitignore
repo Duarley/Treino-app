@@ -8,3 +8,4 @@ android/.gradle/
 *.log
 *.class
 .env
+android/local.properties
