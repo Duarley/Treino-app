@@ -1,6 +1,10 @@
-node_modules
-dist
-build
-.android
-.gradle
+node_modules/
+dist/
+build/
+.android/
+.gradle/
+android/build/
+android/.gradle/
+*.log
+*.class
 .env
